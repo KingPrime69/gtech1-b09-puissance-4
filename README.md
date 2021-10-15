@@ -1,5 +1,2 @@
 # puissance-4
 Projet G.T 1 p4
-356
-400
-Marie-lys je t'aime !
