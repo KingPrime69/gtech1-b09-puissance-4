@@ -5,15 +5,18 @@
 #define NBL 6
 #define NBC 7
 
+int init = 0;
+char end[5]= "fin";
 char request[10] = "wait";
 char start[10] = "jouer";
 char norm[10] = "regles";
+char head[5] = "menu";
 char tab[NBL][NBC];
 char i;
 char u;
 int count;
 
-void init(void) {
+void jeu(void) {
   for(count=0; count<15; count++)
     printf("_");
   printf("\n\n");
@@ -59,23 +62,44 @@ void rule(void){
   for(count=0; count<15; count++)
     printf("_");
   printf("\n\n");
-  printf("Règles du jeu\n");
+  printf(" Règles du jeu\n");
   for(count=0; count<15; count++)
     printf("_");
   printf("\n\n");
+  printf("Les règles du puissance 4 sont simple le but est d'être le premiers à aligner 4 jetons horizontalement, ve\
+rticalement ou diagonalement.\n");
+  for(count=0; count<15; count++)
+    printf("_");
+  printf("\n\n");
+  printf("   Commandes\n");
+  for(count=0; count<15; count++)
+    printf("_");
+  printf("\n\n");
+  printf("écrire les comandes pour naviguer dans le jeux\n");
 }
 
 void main(void){
-  menu();
-  scanf("%10s", request);
-  if(strcmp(request, start) == 0){
-    init();
+  if(init == 0){
+    menu();
+    init = 1;
   }
-  else if(strcmp(request, norm) == 0){
-    rule();
-  }
-  else{
-    printf("erreur");
+  while(init == 1){
+    scanf("%10s", request);
+    if(strcmp(request, start) == 0){
+      printf("%d\n", *tab);
+     jeu();
+    }
+    else if(strcmp(request, norm) == 0){
+      rule();
+    }
+    else if(strcmp(request, head) == 0){
+      menu();
+    }
+    else if(strcmp(request, end) == 0){
+      init = 0;
+    }
+    else{
+      printf("\ntapez une commande valide !\n");
+    }
   }
 }
-	
