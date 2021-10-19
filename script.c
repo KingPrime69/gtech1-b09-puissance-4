@@ -1,3 +1,4 @@
+//manque tour par tour, rajouter les commandes et mettre la navidation texte pendant le jeux
 #include <stdio.h>
 #include <stdlib.h>
 #include<string.h>
