@@ -5,6 +5,11 @@
 #define NBL 6
 #define NBC 7
 
+int loop;
+int line;
+int slide[NBC];
+int hit;
+char tokens[] = "ox";
 int init = 0;
 char end[5]= "fin";
 char request[10] = "wait";
@@ -12,70 +17,78 @@ char start[10] = "jouer";
 char norm[10] = "regles";
 char head[5] = "menu";
 char tab[NBL][NBC];
-char i;
-char u;
 int count;
 
-void jeu(void) {
+void title(char* heading){
   for(count=0; count<15; count++)
     printf("_");
   printf("\n\n");
-  printf("  PUISSANCE 4\n");
+  printf("%s", heading);
+  printf("\n");
   for(count=0; count<15; count++)
     printf("_");
   printf("\n\n");
+}
+
+void grill(void) {
+  title("  Pussance 4");
   for(int l=0; l<NBL; l++) {
     for(int c=0; c<NBC; c++) {
-      tab[i][u] = '|';
-      printf("%s",*tab);
-      tab[i][u] = '.';
-      printf("%s", *tab);
+      tab[l][c] = '.';
     }
-    tab[i][u] = '|';
-    printf("%s", *tab);
+  }
+}
+
+void show_grill(void){
+  for(int l=0; l<NBL; l++){
     printf("\n");
-  }
-  for(count=1; count != 8; count++){
+    for(int c=0; c<NBC; c++) {
+      printf("|%c", tab[l][c]);
+    }
     printf("|");
-    printf("%d", count);
   }
-  printf("|");
-  printf("\n");
+  printf("\n|1|2|3|4|5|6|7|\n");
 }
 
 void menu(void){
   for(count=0; count<15; count++)
-    printf("_");
-  printf("\n\n");
-  printf("     -MENU\n");
-  printf("-Régles du jeu\n");
-  printf("-Lancer la partie\n");
-  for(count=0; count<15; count++)
-    printf("_");
-  printf("\n\n\n");
-  printf("Choissisez un sommaire\n");
+    title("    -Menu");
+  printf("Choissisez un sommaire:\n");
   printf("-jouer (lancera la partie)\n");
   printf("-régles (affichera les régles et commandes du jeu)\n");
 }
 
 void rule(void){
-  for(count=0; count<15; count++)
-    printf("_");
-  printf("\n\n");
-  printf(" Règles du jeu\n");
-  for(count=0; count<15; count++)
-    printf("_");
-  printf("\n\n");
+  title(" Règles du jeux");
   printf("Les règles du puissance 4 sont simple le but est d'être le premiers à aligner 4 jetons horizontalement, ve\
-rticalement ou diagonalement.\n");
-  for(count=0; count<15; count++)
-    printf("_");
-  printf("\n\n");
-  printf("   Commandes\n");
-  for(count=0; count<15; count++)
-    printf("_");
-  printf("\n\n");
+\rticalement ou diagonalement.\n");
+  title("   Commandes");
   printf("écrire les comandes pour naviguer dans le jeux\n");
+}
+
+void player_stroke(int playerAction, int next){
+  tab[5-next][playerAction] = tokens[0];
+  slide[playerAction]++;
+}
+
+void pawn(){
+  for (int l=0; l<line; l++){
+    slide[l] = 0;
+  }
+  printf("\n");
+}
+
+void game(){
+  grill();
+  show_grill();
+  loop = 1;
+  while(loop == 1){
+    pawn();
+    printf("Ou voulez vous placez votre pion?\n");
+    scanf("%d", &hit);
+    player_stroke(hit-1, slide[hit-1]);
+    show_grill();
+  }
 }
 
 void main(void){
@@ -87,7 +100,7 @@ void main(void){
     scanf("%10s", request);
     if(strcmp(request, start) == 0){
       printf("%d\n", *tab);
-     jeu();
+      game();
     }
     else if(strcmp(request, norm) == 0){
       rule();
