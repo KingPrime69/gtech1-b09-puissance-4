@@ -1,4 +1,4 @@
-//manque tour par tour, rajouter les commandes et mettre la navidation texte pendant le jeux
+//rajouter les commandes et mettre la navigation texte pendant le jeux
 #include <stdio.h>
 #include <stdlib.h>
 #include<string.h>
@@ -19,6 +19,7 @@ char norm[10] = "regles";
 char head[5] = "menu";
 char tab[NBL][NBC];
 int count;
+int player = 0;
 
 void title(char* heading){
   for(count=0; count<15; count++)
@@ -85,6 +86,9 @@ void game(){
   loop = 1;
   while(loop == 1){
     pawn();
+    player = !player;
+    tokens[player];
+    printf("%d", player);
     printf("Ou voulez vous placez votre pion?\n");
     scanf("%d", &hit);
     player_stroke(hit-1, slide[hit-1]);
