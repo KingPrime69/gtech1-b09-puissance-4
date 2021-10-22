@@ -84,16 +84,20 @@ void game(){
   grill();
   show_grill();
   loop = 1;
+  char* verif;
   while(loop == 1){
     pawn();
-    player = !player;
-    tokens[player];
-    printf("%d", player);
     printf("Ou voulez vous placez votre pion?\n");
-    scanf("%d", &hit);
-    player_stroke(hit-1, slide[hit-1]);
-    show_grill();
-    printf("%s", tab);
+    scanf("%s", &hit);
+    if(hit>48 && hit <=55){
+      hit =hit-48;
+      player_stroke(hit-1, slide[hit-1]);
+      show_grill();
+      player = !player;
+    }
+    else{
+      printf("Seul les chiffres de 1 à 7 sont acceptable");
+    }
   }
 }
 
