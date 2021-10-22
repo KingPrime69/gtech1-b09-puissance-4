@@ -69,7 +69,7 @@ void rule(void){
 }
 
 void player_stroke(int playerAction, int next){
-  tab[5-next][playerAction] = tokens[0];
+  tab[5-next][playerAction] = tokens[player];
   slide[playerAction]++;
 }
 
@@ -93,6 +93,7 @@ void game(){
     scanf("%d", &hit);
     player_stroke(hit-1, slide[hit-1]);
     show_grill();
+    printf("%s", tab);
   }
 }
 

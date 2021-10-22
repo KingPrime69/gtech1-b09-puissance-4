@@ -18,6 +18,7 @@ char norm[10] = "regles";
 char head[5] = "menu";
 char tab[NBL][NBC];
 int count;
+int player = 1;
 
 void title(char* heading){
   for(count=0; count<15; count++)
@@ -66,7 +67,7 @@ void rule(void){
 }
 
 void player_stroke(int playerAction, int next){
-  tab[5-next][playerAction] = tokens[1];
+  tab[5-next][playerAction] = tokens[player];
   slide[playerAction]++;
 }
 
@@ -77,11 +78,38 @@ void pawn(){
   printf("\n");
 }
 
+void game(){
+  grill();
+  show_grill();
+  loop = 1;
+  while(loop == 1){
+    pawn();
+    player = !player;
+    printf("Ou voulez vous placez votre pion?\n");    
+    scanf("%d", &hit);
+    printf("%d\n", hit);
+    if(hit>0 && hit <=7){
+      player_stroke(hit-1, slide[hit-1]);
+      show_grill();
+    }
+    else{
+      printf("erreur commande");
+    }
+  }
+}
 
-void navGame(){
+void main(void){
+  if(init == 0){
+    menu();
+    init = 1;
+  }
   while(init == 1){
     scanf("%10s", request);
-    if(strcmp(request, norm) == 0){
+    if(strcmp(request, start) == 0){
+      printf("%d\n", *tab);
+      game();
+    }
+    else if(strcmp(request, norm) == 0){
       rule();
     }
     else if(strcmp(request, head) == 0){
@@ -93,28 +121,5 @@ void navGame(){
     else{
       printf("\ntapez une commande valide !\n");
     }
-  }
-}
-
-void game(){
-  grill();
-  show_grill();
-  loop = 1;
-  while(loop == 1){
-    pawn();
-    printf("Ou voulez vous placez votre pion?\n");
-    scanf("%d", &hit);
-    player_stroke(hit-1, slide[hit-1]);
-    show_grill();
-    printf("%s", tab);
-    navGame();
-  }
-}
-
-void main(void){
-  if(init == 0){
-    menu();
-    init = 1;
-    game();
   }
 }
