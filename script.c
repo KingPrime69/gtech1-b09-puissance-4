@@ -1,4 +1,5 @@
 //rajouter les commandes et mettre la navigation texte pendant le jeux
+//essaye avec lecture de hit en %d et mettre quand 0 passer en mode txt
 #include <stdio.h>
 #include <stdlib.h>
 #include<string.h>
