@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include<string.h>
 
-#define NBL 6
-#define NBC 7
+#define NBL 100
+#define NBC 100
 
 int loop;
 int line;
@@ -20,6 +20,10 @@ char head[5] = "menu";
 char tab[NBL][NBC];
 int count;
 int player = 0;
+int* L;
+int* C;
+int add;
+
 
 void title(char* heading){
   for(count=0; count<15; count++)
@@ -33,23 +37,32 @@ void title(char* heading){
 }
 
 void grill(void) {
-  title("  Pussance 4");
-  for(int l=0; l<NBL; l++) {
-    for(int c=0; c<NBC; c++) {
+  C = malloc(sizeof(int));
+  printf("nombre de colone ?\n");
+  scanf("%d", C);
+  L = malloc(sizeof(int));
+  printf("nombre de ligne ?\n");
+  scanf("%d", L);
+  for(int l=0; l<*L; l++) {
+    for(int c=0; c<*C; c++) {
       tab[l][c] = '.';
     }
   }
 }
 
 void show_grill(void){
-  for(int l=0; l<NBL; l++){
+  title("  Puissance 4");
+  for(int l=0; l<*L; l++){
     printf("\n");
-    for(int c=0; c<NBC; c++) {
+    for(int c=0; c<*C; c++) {
       printf("|%c", tab[l][c]);
     }
     printf("|");
   }
-  printf("\n|1|2|3|4|5|6|7|\n");
+  printf("\n");
+  for(int c=1; c<*C+1; c++)
+    printf("|%d", c);
+  printf("|\n");
 }
 
 void menu(void){
@@ -69,7 +82,8 @@ void rule(void){
 }
 
 void player_stroke(int playerAction, int next){
-  tab[5-next][playerAction] = tokens[player];
+  add = *L-1;
+  tab[add-next][playerAction] = tokens[player];
   slide[playerAction]++;
 }
 
@@ -84,12 +98,12 @@ void game(){
   grill();
   show_grill();
   loop = 1;
-  char* verif;
   while(loop == 1){
+    hit = 0;
     pawn();
     printf("Ou voulez vous placez votre pion?\n");
     scanf("%s", &hit);
-    if(hit>48 && hit <=55){
+    if(hit>48 && hit <=*C+48){
       hit =hit-48;
       player_stroke(hit-1, slide[hit-1]);
       show_grill();
@@ -109,7 +123,6 @@ void main(void){
   while(init == 1){
     scanf("%10s", request);
     if(strcmp(request, start) == 0){
-      printf("%d\n", *tab);
       game();
     }
     else if(strcmp(request, norm) == 0){
