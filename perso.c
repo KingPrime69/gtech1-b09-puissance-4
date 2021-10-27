@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include<string.h>
 
-#define NBL 6
-#define NBC 7
+#define NBL 100
+#define NBC 100
 
+int tab[NBL][NBC];
+int add;
 int loop;
 int line;
 int slide[NBC];
@@ -16,9 +18,13 @@ char request[10] = "wait";
 char start[10] = "jouer";
 char norm[10] = "regles";
 char head[5] = "menu";
-char tab[NBL][NBC];
 int count;
-int player = 1;
+int player = 0;
+int* L;
+int* C;
+char restart[10] = "rejouer";
+char unpause[10] = "reprendre";
+
 
 void title(char* heading){
   for(count=0; count<15; count++)
@@ -31,24 +37,36 @@ void title(char* heading){
   printf("\n\n");
 }
 
-void grill(void) {
-  title("  Pussance 4");
-  for(int l=0; l<NBL; l++) {
-    for(int c=0; c<NBC; c++) {
+void grill(void){
+  C = malloc(sizeof(int));
+  printf("nombre de colone ?\n");
+  scanf("%d", C);
+  L = malloc(sizeof(int));
+  printf("nombre de ligne ?\n");
+  scanf("%d", L);
+  for(int l=0; l<*L; l++) {
+    for(int c=0; c<*C; c++) {
       tab[l][c] = '.';
     }
+  }
+  for (int l=0; l<*L; l++){
+    slide[l] = 0;
   }
 }
 
 void show_grill(void){
-  for(int l=0; l<NBL; l++){
+  title("  Pussance 4");
+  for(int l=0; l<*L; l++){
     printf("\n");
-    for(int c=0; c<NBC; c++) {
+    for(int c=0; c<*C; c++) {
       printf("|%c", tab[l][c]);
     }
     printf("|");
   }
-  printf("\n|1|2|3|4|5|6|7|\n");
+  printf("\n");
+  for(int c=1; c<*C+1; c++)
+    printf("|%d", c);
+  printf("|\n");
 }
 
 void menu(void){
@@ -61,21 +79,16 @@ void menu(void){
 
 void rule(void){
   title(" Règles du jeux");
-  printf("Les règles du puissance 4 sont simple le but est d'être le premiers à aligner 4 jetons horizontalement, verticalement ou diagonalement.\n");
+  printf("Les règles du puissance 4 sont simple le but est d'être le premiers à aligner 4 jetons horizontalement, ve\
+\rticalement ou diagonalement.\n");
   title("   Commandes");
   printf("écrire les comandes pour naviguer dans le jeux\n");
 }
 
 void player_stroke(int playerAction, int next){
-  tab[5-next][playerAction] = tokens[player];
+  add = *L-1;
+  tab[add-next][playerAction] = tokens[player];
   slide[playerAction]++;
-}
-
-void pawn(){
-  for (int l=0; l<line; l++){
-    slide[l] = 0;
-  }
-  printf("\n");
 }
 
 void game(){
@@ -83,22 +96,54 @@ void game(){
   show_grill();
   loop = 1;
   while(loop == 1){
-    pawn();
-    player = !player;
-    printf("Ou voulez vous placez votre pion?\n");    
+    hit = 0;
+    printf("\nOu voulez vous placez votre pion?\n");
     scanf("%d", &hit);
-    printf("%d\n", hit);
-    if(hit>0 && hit <=7){
+    printf("%c\n", hit);
+    if(hit == -1){
+      init = 1;
+      while(init == 1){
+	printf("vous êtes en mode commande\n");
+	scanf("%s", request);
+	if(strcmp(request, restart) == 0){
+	  game();
+	  free(L);
+	  free(C);
+	}
+	else if(strcmp(request, norm) == 0){
+	  rule();
+	}
+	else if(strcmp(request, head) == 0){
+	  menu();
+	  loop = 0;
+	}
+	else if(strcmp(request, unpause) == 0){
+	  init = 0;
+	}
+	else if(strcmp(request, end) == 0){
+	  init = 0;
+	  free(L);
+	  free(C);
+	}
+	else{
+	  printf("\ntapez une commande valide !\n");
+	}
+      }
+    }
+    else if(hit == 0){
+      printf("couille");
+    }
+    else if(hit>=1 && hit <=*C){
       player_stroke(hit-1, slide[hit-1]);
       show_grill();
+      player = !player;
     }
-    else{
-      printf("erreur commande");
-    }
+    else
+      printf("Seul les chiffres de 1 à %d sont acceptable", *C);     
   }
 }
 
-void main(void){
+int main(){  
   if(init == 0){
     menu();
     init = 1;
@@ -106,8 +151,8 @@ void main(void){
   while(init == 1){
     scanf("%10s", request);
     if(strcmp(request, start) == 0){
-      printf("%d\n", *tab);
       game();
+      init = 0;
     }
     else if(strcmp(request, norm) == 0){
       rule();
