@@ -6,6 +6,7 @@
 #define NBL 100
 #define NBC 100
 
+char com[10] = "commandes";
 int login = 1;
 int tab[NBL][NBC];
 int add;
@@ -18,7 +19,7 @@ int init = 0;
 char end[5]= "fin";
 char request[10] = "wait";
 char start[10] = "jouer";
-char norm[10] = "regles";
+char norm[10] = "régles";
 char head[5] = "menu";
 int count;
 int player = 0;
@@ -115,15 +116,27 @@ void menu(void){
     title("    -Menu");
   printf("Choissisez un sommaire:\n");
   printf("-jouer (lancera la partie)\n");
-  printf("-régles (affichera les régles et commandes du jeu)\n");
+  printf("-régles (affichera les régles)\n");
+  printf("-commandes (affichera la liste des commandes de navigation)\n"); 
 }
 
 void rule(void){
   title(" Règles du jeux");
-  printf("Les règles du puissance 4 sont simple le but est d'être le premiers à aligner 4 jetons horizontalement, ve\
-rticalement ou diagonalement.\n");
+  printf("Les règles du puissance 4 sont simple le but est d'être le premiers à aligner 4 jetons horizontalement, verticalement ou diagonalement.\n");
+}
+
+void control(void){
   title("   Commandes");
-  printf("écrire les comandes pour naviguer dans le jeux\n");
+  printf("DANS LE MENU :\n\n");
+  printf("jouer = lance la partie\n");
+  printf("rejouer = redémarre une nouvelle partie\n");
+  printf("règles = permets d'afficher les règles(valable pendant une partie)\n");
+  printf("commandes = permets d'afficher ce que vous voyez<3\n");
+  printf("fin = arrête le programme(valable aussi en jeux)\n\n");
+  printf("EN JEUX :\n\n");
+  printf("0 = permet de passer en mode commande texte\n");
+  printf("reprendre = permets de quitter le mode commande\n");
+  printf("menu = mets fin à la partie et renvoie à l'écran d'accueil\n");
 }
 
 void player_stroke(int playerAction, int next){
@@ -139,6 +152,7 @@ void game(){
     while((hit = getchar()) != '\n' && hit != EOF);
     printf("\nOu voulez vous placez votre pion?\n");
     scanf("%d", &hit);
+    printf("%d\n", hit);
     if(hit == 0){
       init = 1;
       while(init == 1){
@@ -167,11 +181,14 @@ void game(){
           free(C);
           loop = 0;
         }
-        else{
+	else if(strcmp(request, com) == 0){
+	  control();
+	}
+	else{
           printf("\ntapez une commande valide !\n");
         }
       }
-    }
+    }      
     else if(hit>=1 && hit <=*C){
       player_stroke(hit-1, slide[hit-1]);
       if(*C>=10)
@@ -204,9 +221,11 @@ void main(void){
     else if(strcmp(request, end) == 0){
       init = 0;
     }
+    else if(strcmp(request, com) == 0){
+      control();
+    }
     else{
       printf("\ntapez une commande valide !\n");
     }
   }
 }
->>>>>>> 3ca756f08931d9369d3351798afe559ec133780b
